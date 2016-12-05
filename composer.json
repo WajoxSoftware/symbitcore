@@ -1,0 +1,31 @@
+{
+    "name": "wajox/symbitcore",
+    "description": "bitrix wrapper core",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ildar Usmanov",
+            "email": "wajox@mail.ru"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "drewm/mailchimp-api": "^2.2",
+        "symfony/http-foundation": "^3.1",
+        "symfony/routing": "^3.1",
+        "symfony/dependency-injection": "^3.1",
+        "symfony/config": "^3.1",
+        "symfony/yaml": "^3.1",
+        "vlucas/phpdotenv": "*",
+        "symfony/templating": "^3.1",
+        "theiconic/php-ga-measurement-protocol": "^2.0",
+        "robmorgan/phinx": "*",
+        "doctrine/orm": "2.4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "wajox\\symbitcore\\": "src/"
+        }
+    }
+}
