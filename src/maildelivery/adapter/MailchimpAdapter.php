@@ -44,7 +44,7 @@ class MailchimpAdapter extends \wajox\symbitcore\base\AdapterAbstract
 		$this->setBatch($this->getApi()->new_batch());
 	}
 
-	protected function executeBatch()
+	public function executeBatch()
 	{
 		if (!$this->getBatch()) {
 			return;
@@ -54,7 +54,7 @@ class MailchimpAdapter extends \wajox\symbitcore\base\AdapterAbstract
 		$this->setBatch(null);
 	}
 
-	protected function getBatch()
+	public function getBatch()
 	{
 		return $this->batch;
 	}
