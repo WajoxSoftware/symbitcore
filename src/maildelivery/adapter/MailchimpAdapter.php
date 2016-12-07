@@ -10,6 +10,7 @@ class MailchimpAdapter extends \wajox\symbitcore\base\AdapterAbstract
 	const MEMBER_SUBSCRIBED = 'subscribed';
 
 	protected $api;
+	protected $batch;
 
 	protected function init()
 	{
@@ -30,7 +31,39 @@ class MailchimpAdapter extends \wajox\symbitcore\base\AdapterAbstract
 
 	protected function getApi()
 	{
+		if ($this->getBatch()) {
+			return $this->getBatch();
+		}
+
 		return $this->api;
+	}
+
+	protected function startBatch()
+	{
+		$this->setBatch(null);
+		$this->setBatch($this->getApi()->new_batch());
+	}
+
+	protected function executeBatch()
+	{
+		if (!$this->getBatch()) {
+			return;
+		}
+
+		$this->getBatch()->execute();
+		$this->setBatch(null);
+	}
+
+	protected function getBatch()
+	{
+		return $this->batch;
+	}
+
+	protected function setBatch($batch)
+	{
+		$this->batch = $batch;
+
+		return $this;
 	}
 
 	public function getTemplatesList()
@@ -115,15 +148,20 @@ class MailchimpAdapter extends \wajox\symbitcore\base\AdapterAbstract
 
 		$members = [];
 
+		$this->startBatch();
+
 		foreach ($recipients as $recipient) {
 			$email = $recipient['email'];
 
 			$members[$email] = $this->addListMember(
 				$list['id'],
 				$email,
-				$recipient['fields']
+				$recipient['fields'],
+				true
 			);
 		}
+
+		$this->executeBatch();
 
 		return ['list' => $list, 'members' => $members];
 	}
