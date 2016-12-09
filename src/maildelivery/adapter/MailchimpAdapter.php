@@ -15,9 +15,6 @@ class MailchimpAdapter extends \wajox\symbitcore\base\AdapterAbstract
 	protected function init()
 	{
 		$apiKey = $this->getConfigParam('api_key');
-		/*
-		 * @FIXME: do not use hardcoded key
-		 */
 
 		$this->setApi(new MailChimp($apiKey));
 	}
