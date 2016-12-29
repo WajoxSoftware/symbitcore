@@ -16,9 +16,9 @@ class BaseModel
 
     public function __get($key)
     {
-    	$key = $this->getPropertyName($key);
+        $key = $this->getPropertyName($key);
 
-    	return $this->$key;
+        return $this->$key;
     }
 
     protected function getPropertyName($key)
@@ -30,13 +30,13 @@ class BaseModel
         $snakeKey = TextHelper::camel2snake($key);
 
         if (property_exists($this, $snakeKey)) {
-        	return $snakeKey;
+            return $snakeKey;
         }
 
         $msg = 'Property ' . $key
-        	. ', ' . $snakeKey
-        	. ' does not exists for class '
-        	. get_class($this);
+            . ', ' . $snakeKey
+            . ' does not exists for class '
+            . get_class($this);
 
         throw new \Exception($msg);
     }

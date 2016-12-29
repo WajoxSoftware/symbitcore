@@ -3,31 +3,31 @@ namespace wajox\symbitcore\base;
 
 abstract class AdapterAbstract
 {
-	protected $config = [];
+    protected $config = [];
 
-	public function __construct($config)
-	{
-		$this->setConfig($config)->init();
-	}
+    public function __construct($config)
+    {
+        $this->setConfig($config)->init();
+    }
 
-	protected function getConfig()
-	{
-		return $this->config;
-	}
+    protected function getConfig()
+    {
+        return $this->config;
+    }
 
-	protected function setConfig($config)
-	{
-		$this->config = $config;
+    protected function setConfig($config)
+    {
+        $this->config = $config;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	protected function getConfigParam($name)
-	{
-		if (isset($this->config[$name])) {
-			return $this->config[$name];
-		}
-	}
+    protected function getConfigParam($name)
+    {
+        if (isset($this->config[$name])) {
+            return $this->config[$name];
+        }
+    }
 
-	abstract protected function init();
+    abstract protected function init();
 }

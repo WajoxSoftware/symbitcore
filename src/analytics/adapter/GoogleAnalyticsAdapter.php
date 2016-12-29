@@ -6,116 +6,117 @@ use wajox\symbitcore\base\Application;
 
 class GoogleAnalyticsAdapter extends \wajox\symbitcore\base\AdapterAbstract
 {
-	protected $api;
+    protected $api;
 
-	protected function init()
-	{
-		;
-	}
+    protected function init()
+    {
+        ;
+    }
 
-	protected function setApi($api)
-	{
-		$this->api = $api;
+    protected function setApi($api)
+    {
+        $this->api = $api;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	protected function getRequest()
-	{
-		return Application::getInstance()->getRequest();
-	}
+    protected function getRequest()
+    {
+        return Application::getInstance()->getRequest();
+    }
 
-	public function getRequestClientIp()
-	{
-		$ip = $this->getRequest()->server->get('HTTP_X_FORWARDED_FOR');
+    public function getRequestClientIp()
+    {
+        $ip = $this->getRequest()->server->get('HTTP_X_FORWARDED_FOR');
 
-		if ($ip) {
-			return $ip;
-		}
+        if ($ip) {
+            return $ip;
+        }
 
-		return $this->getRequest()->server->get('REMOTE_ADDR');
-	}
+        return $this->getRequest()->server->get('REMOTE_ADDR');
+    }
 
-	public function getCookieClientId()
-	{
-		$ga = $this->getRequest()->cookies->get('_ga');
+    public function getCookieClientId()
+    {
+        $ga = $this->getRequest()->cookies->get('_ga');
 
-		if (!$ga) {
-			return;;
-		}
+        if (!$ga) {
+            return;
+            ;
+        }
 
-		$ga = explode('.', $ga);
+        $ga = explode('.', $ga);
 
-		if (!isset($ga[2])
-			|| !isset($ga[3])
-		) {
-			return;
-		}
+        if (!isset($ga[2])
+            || !isset($ga[3])
+        ) {
+            return;
+        }
 
         return $ga[2].'.'.$ga[3];
-	}
+    }
 
-	public function createApi()
-	{
-		$trackingId = $this->getConfigParam('trackingId');
-		$version = '1';
-		$path = '/';
+    public function createApi()
+    {
+        $trackingId = $this->getConfigParam('trackingId');
+        $version = '1';
+        $path = '/';
 
-		$api = new Analytics(true);
+        $api = new Analytics(true);
 
-		$api
-		    ->setProtocolVersion($version)
-		    ->setTrackingId($trackingId)
-		    ->setDocumentPath($path)
-		    ->setClientId('');
+        $api
+            ->setProtocolVersion($version)
+            ->setTrackingId($trackingId)
+            ->setDocumentPath($path)
+            ->setClientId('');
 
-		$this->setApi($api);
+        $this->setApi($api);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setClientId($clientId)
-	{
-		if (empty($clientId)) {
-			$clientId = '';
-		}
+    public function setClientId($clientId)
+    {
+        if (empty($clientId)) {
+            $clientId = '';
+        }
 
-		$this->getApi()->setClientId($clientId);
-		
-		return $this;
-	}
+        $this->getApi()->setClientId($clientId);
+        
+        return $this;
+    }
 
-	public function setUserId($userId)
-	{
-		if (empty($userId)) {
-			return $this;
-		}
-		
-		$this->getApi()->setUserId($userId);
-		
-		return $this;
-	}
+    public function setUserId($userId)
+    {
+        if (empty($userId)) {
+            return $this;
+        }
+        
+        $this->getApi()->setUserId($userId);
+        
+        return $this;
+    }
 
-	public function getApi()
-	{
-		return $this->api;
-	}
+    public function getApi()
+    {
+        return $this->api;
+    }
 
-	public function sendEvent($category, $action, $label = null, $value = null)
-	{
-		$this->getApi()->setEventCategory($category)
-    		->setEventAction($action);
+    public function sendEvent($category, $action, $label = null, $value = null)
+    {
+        $this->getApi()->setEventCategory($category)
+            ->setEventAction($action);
 
-    	if ($label !== null) {
-    		$this->getApi()->setEventLabel($label);
-    	}
+        if ($label !== null) {
+            $this->getApi()->setEventLabel($label);
+        }
 
-    	if ($value !== null) {
-    		$this->getApi()->setEventValue($value);
-    	}
+        if ($value !== null) {
+            $this->getApi()->setEventValue($value);
+        }
 
-    	$this->getApi()->sendEvent();
+        $this->getApi()->sendEvent();
 
-    	return $this;
-	}
+        return $this;
+    }
 }

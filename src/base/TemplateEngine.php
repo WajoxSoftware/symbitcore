@@ -3,5 +3,5 @@ namespace wajox\symbitcore\base;
 
 class TemplateEngine extends \Symfony\Component\Templating\PhpEngine
 {
-	use \wajox\symbitcore\traits\ApplicationTrait;
+    use \wajox\symbitcore\traits\ApplicationTrait;
 }
