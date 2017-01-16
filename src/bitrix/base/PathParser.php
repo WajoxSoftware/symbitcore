@@ -14,7 +14,7 @@ class PathParser
         if (!file_exists($fullPath)
             || !$this->isBitrixPath($fullPath)
         ) {
-            throw new NotFoundException('Page not found');
+            return APP_BITRIX_ROOT_DIR . '/404.php';
         }
 
         return $fullPath;
