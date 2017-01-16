@@ -5,6 +5,8 @@ use wajox\symbitcore\exceptions\NotFoundException;
 
 class PathParser
 {
+    protected $rewriteRules = [];
+
     public function getBitrixPath($path)
     {
         $fullPath = APP_BITRIX_ROOT_DIR . $this->computeBitrixPath($path);
@@ -20,30 +22,23 @@ class PathParser
 
     protected function computeBitrixPath($path)
     {
-        $resultPath = $path;
-        
-        while (!in_array($resultPath, ['', '.', '\\', '/'])) {
-            $ext = pathinfo($resultPath, PATHINFO_EXTENSION);
-
-            if ($ext == ''
-                && $ext != 'php'
-                && !is_dir(APP_BITRIX_ROOT_DIR . $resultPath)
-            ) {
-                $resultPath = dirname($resultPath);
+        foreach ($this->rewriteRules as $rule) {
+            if (preg_match($rule['CONDITION'], $path) === 1) {
+                return $rule['PATH'];
             }
-
-            if (file_exists(APP_BITRIX_ROOT_DIR . $resultPath . '/index.php')) {
-                return $resultPath . '/index.php';
-            }
-
-            if (file_exists(APP_BITRIX_ROOT_DIR . $resultPath)) {
-                return $resultPath;
-            }
-
-            $resultPath = dirname($resultPath);
         }
-        
-        return '/index.php';
+
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+
+        if (file_exists(APP_BITRIX_ROOT_DIR . $path . '/index.php')) {
+            return $path . '/index.php';
+        }
+
+        if (file_exists(APP_BITRIX_ROOT_DIR . $path)) {
+            return $path;
+        }
+
+        return $path;
     }
 
     protected function isBitrixPath($path)
@@ -53,5 +48,22 @@ class PathParser
 
         return strpos($realPath, $bitrixRealPath) === 0
             && (file_exists($realPath) || file_exists($realPath . '/index.php'));
+    }
+
+    protected function setRewriteRules($rewriteRules)
+    {
+        $this->rewriteRules = $rewriteRules;
+
+        return $this;
+    }
+
+    protected function loadRewriteRules()
+    {
+        $arUrlRewrite = [];
+
+        if (file_exists(APP_BITRIX_ROOT_DIR . "/urlrewrite.php")) {
+            include(APP_BITRIX_ROOT_DIR . "/urlrewrite.php");
+            $this->setRewriteRules($arUrlRewrite);
+        }
     }
 }
