@@ -14,7 +14,7 @@
         "drewm/mailchimp-api": "^2.2",
         "symfony/http-foundation": "^3.1",
         "symfony/routing": "^3.1",
-        "symfony/dependency-injection": "^3.1",
+        "symfony/dependency-injection": "3.1.*",
         "symfony/config": "^3.1",
         "symfony/yaml": "^3.1",
         "vlucas/phpdotenv": "*",
